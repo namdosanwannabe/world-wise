@@ -1,0 +1,40 @@
+{
+  "cities": [
+    {
+      "cityName": "Samal",
+      "country": "Philippines (the)",
+      "emoji": "PH",
+      "date": "2025-06-15T12:26:56.958Z",
+      "notes": "",
+      "position": {
+        "lat": "14.765587122978873",
+        "lng": "120.53718566894533"
+      },
+      "id": 2
+    },
+    {
+      "cityName": "Balanga",
+      "country": "Philippines (the)",
+      "emoji": "PH",
+      "date": "2025-06-15T12:28:18.370Z",
+      "notes": "",
+      "position": {
+        "lat": "14.679990777563779",
+        "lng": "120.53635418415071"
+      },
+      "id": 3
+    },
+    {
+      "cityName": "Balanga",
+      "country": "Philippines (the)",
+      "emoji": "PH",
+      "date": "2025-06-15T12:28:26.615Z",
+      "notes": "",
+      "position": {
+        "lat": "14.683400123483686",
+        "lng": "120.53794205188751"
+      },
+      "id": 4
+    }
+  ]
+}
