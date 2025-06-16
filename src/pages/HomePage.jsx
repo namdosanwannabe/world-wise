@@ -1,8 +1,12 @@
 import { Link } from "react-router-dom";
 import PageNav from '../components/PageNav';
 import styles from "./Homepage.module.css";
+import { useAuth } from "../contexts/AuthContext";
 
 export default function Homepage() {
+
+    const { session, signOut, signInWithGoogle } = useAuth();
+
     return (
         <main className={styles.homepage}>
             <PageNav />
@@ -19,6 +23,20 @@ export default function Homepage() {
                     you have wandered the world.
                 </h2>
                 <Link to='/login' className="cta">Start tracking now</Link>
+                <div>
+                    {!session ? (
+                        <button onClick={signInWithGoogle} style={{ padding: '10px 20px', fontSize: '16px' }}>
+                            Sign in with Google
+                        </button>
+                    ) : (
+                        <>
+                            <p>Welcome, {session.user.email}</p>
+                            <button onClick={signOut} style={{ padding: '10px 20px', fontSize: '16px', marginTop: '10px' }}>
+                                Sign out
+                            </button>
+                        </>
+                    )}
+                </div>
             </section>
         </main>
     );

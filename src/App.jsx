@@ -10,7 +10,7 @@ import CityList from "./components/CityList"
 import CountryList from "./components/CountryList"
 import Form from "./components/Form"
 import { CitiesProvider } from "./contexts/CitiesContext"
-import { AuthProvider } from "./contexts/FakeAuthContext"
+import { AuthProvider } from "./contexts/AuthContext"
 import ProtectedRoute from "./pages/ProtectedRoute"
 
 const App = () => {
