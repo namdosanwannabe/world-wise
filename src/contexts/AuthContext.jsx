@@ -41,12 +41,17 @@ function AuthProvider({ children }) {
     useEffect(() => {
         supabase.auth.getSession().then(({ data: { session } }) => {
             dispatch({ type: "session/loaded", payload: session })
+            console.log(session);
         })
 
         const {
             data: { subscription },
         } = supabase.auth.onAuthStateChange((_event, session) => {
-            dispatch({ type: "session/loaded", payload: session })
+            dispatch({ type: "session/loaded", payload: session });
+
+            if (_event === "SIGNED_IN" && session) {
+                handleUserInsert(session);
+            }
         })
 
         return () => subscription.unsubscribe()
@@ -63,6 +68,27 @@ function AuthProvider({ children }) {
         await supabase.auth.signOut()
         dispatch({ type: "logout" })
     }
+
+    const handleUserInsert = async (session) => {
+        if (!session?.user) return;
+
+        const { id, email, user_metadata } = session.user;
+
+        const { data: existingUser, error } = await supabase
+            .from("users")
+            .select("id")
+            .eq("id", id)
+            .single();
+
+        if (!existingUser) {
+            await supabase.from("users").insert({
+                id: id,
+                email: email,
+                full_name: user_metadata.full_name,
+                avatar_url: user_metadata.avatar_url,
+            });
+        }
+    };
 
     return (
         <AuthContext.Provider value={{ session, user, signOut, signInWithGoogle }}>
