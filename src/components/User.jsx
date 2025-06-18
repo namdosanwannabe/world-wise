@@ -1,20 +1,20 @@
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../contexts/FakeAuthContext";
+import { useAuth } from "../contexts/AuthContext";
 import styles from "./User.module.css";
 
 function User() {
     const navigate = useNavigate();
-    const { user, logout } = useAuth();
+    const { user, signOut } = useAuth();
 
     function handleClick() {
-        logout();
+        signOut();
         navigate('/');
     }
 
     return (
         <div className={styles.user}>
-            <img src={user?.avatar} alt={user?.name} />
-            <span>Welcome, {user?.name}</span>
+            <img src={user?.avatar_url} alt={user?.full_name} referrerPolicy="no-referrer" />
+            <span>Welcome, {user?.full_name}</span>
             <button onClick={handleClick}>Logout</button>
         </div>
     );

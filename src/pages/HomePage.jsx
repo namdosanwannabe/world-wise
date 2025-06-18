@@ -5,7 +5,7 @@ import { useAuth } from "../contexts/AuthContext";
 
 export default function Homepage() {
 
-    const { session, signOut, signInWithGoogle } = useAuth();
+    const { session, signInWithGoogle } = useAuth();
 
     return (
         <main className={styles.homepage}>
@@ -22,18 +22,17 @@ export default function Homepage() {
                     of. Never forget your wonderful experiences, and show your friends how
                     you have wandered the world.
                 </h2>
-                <Link to='/login' className="cta">Start tracking now</Link>
+
                 <div>
                     {!session ? (
-                        <button onClick={signInWithGoogle} style={{ padding: '10px 20px', fontSize: '16px' }}>
-                            Sign in with Google
-                        </button>
+                        <>
+                            <Link className="cta" onClick={signInWithGoogle}>
+                                Sign in with Google
+                            </Link>
+                        </>
                     ) : (
                         <>
-                            <p>Welcome, {session.user.email}</p>
-                            <button onClick={signOut} style={{ padding: '10px 20px', fontSize: '16px', marginTop: '10px' }}>
-                                Sign out
-                            </button>
+                            <Link to='/app' className="cta">Start tracking now</Link>
                         </>
                     )}
                 </div>

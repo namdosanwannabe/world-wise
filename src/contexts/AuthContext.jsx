@@ -3,7 +3,7 @@ import { supabase } from "../config/supabaseConfig";
 
 const AuthContext = createContext();
 
-const initalState = {
+const initialState = {
     user: null,
     session: null,
     loading: true
@@ -14,8 +14,13 @@ function reducer(state, action) {
         case 'session/loaded':
             return {
                 ...state,
-                user: action.payload?.user ?? null,
                 session: action.payload,
+                loading: false
+            }
+        case 'user/loaded':
+            return {
+                ...state,
+                user: action.payload,
                 loading: false
             }
         case 'logout':
@@ -36,13 +41,12 @@ function useAuth() {
 }
 
 function AuthProvider({ children }) {
-    const [{ user, session }, dispatch] = useReducer(reducer, initalState);
+    const [{ user, session, loading }, dispatch] = useReducer(reducer, initialState);
 
     useEffect(() => {
         supabase.auth.getSession().then(({ data: { session } }) => {
-            dispatch({ type: "session/loaded", payload: session })
-            console.log(session);
-        })
+            dispatch({ type: "session/loaded", payload: session });
+        });
 
         const {
             data: { subscription },
@@ -51,8 +55,9 @@ function AuthProvider({ children }) {
 
             if (_event === "SIGNED_IN" && session) {
                 handleUserInsert(session);
+                fetchUserDetails(session);
             }
-        })
+        });
 
         return () => subscription.unsubscribe()
     }, [])
@@ -80,18 +85,41 @@ function AuthProvider({ children }) {
             .eq("id", id)
             .single();
 
+        if (error) {
+            console.error('Error checking existing user:', error.message);
+        }
+
         if (!existingUser) {
             await supabase.from("users").insert({
                 id: id,
                 email: email,
-                full_name: user_metadata.full_name,
-                avatar_url: user_metadata.avatar_url,
+                full_name: user_metadata.full_name ?? '',
+                avatar_url: user_metadata.avatar_url ?? '',
             });
         }
     };
 
+    const fetchUserDetails = async (session) => {
+        if (!session?.user) return;
+
+        const { id } = session.user;
+
+        const { data, error } = await supabase
+            .from('users')
+            .select('*')
+            .eq('id', id)
+            .single();
+
+        if (error) {
+            console.error('Error fetching user:', error.message);
+            return;
+        }
+
+        dispatch({ type: 'user/loaded', payload: data });
+    }
+
     return (
-        <AuthContext.Provider value={{ session, user, signOut, signInWithGoogle }}>
+        <AuthContext.Provider value={{ session, user, loading, signOut, signInWithGoogle }}>
             {children}
         </AuthContext.Provider>
     )
