@@ -1,4 +1,6 @@
-import { act, createContext, useContext, useEffect, useReducer, useState } from "react";
+import { createContext, useContext, useEffect, useReducer, useState } from "react";
+import { supabase } from "../config/supabaseConfig";
+import { useAuth } from "./AuthContext";
 
 const BASE_URL = 'http://localhost:3000';
 
@@ -59,6 +61,8 @@ function reducer(state, action) {
 }
 
 export function CitiesProvider({ children }) {
+    const { user } = useAuth();
+
     const [{ cities, isLoading, currentCity, error }, dispatch] =
         useReducer(
             reducer,
@@ -101,19 +105,25 @@ export function CitiesProvider({ children }) {
         }
     }
 
-    async function createCity(newCity) {
+    async function createCity(city) {
         dispatch({ type: "loading" });
 
         try {
-            const res = await fetch(`${BASE_URL}/cities`, {
-                method: 'POST',
-                body: JSON.stringify(newCity),
-                headers: {
-                    "Content-Type": "application/json"
-                }
-            });
-            const data = await res.json();
+            const { data, error } = await supabase.from("cities").insert([{
+                city_name: city.cityName,
+                country: city.country,
+                emoji: city.emoji,
+                date_visited: city.date,
+                notes: city.notes,
+                lat: city.position.lat,
+                lng: city.position.lng,
+                user_id: user.id
+            }]).select();
+
+            if (error) throw error;
+
             dispatch({ type: "city/created", payload: data });
+
         } catch (error) {
             dispatch({
                 type: "rejected",
