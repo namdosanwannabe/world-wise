@@ -74,19 +74,26 @@ export function CitiesProvider({ children }) {
             dispatch({ type: "loading" });
 
             try {
-                const res = await fetch(`${BASE_URL}/cities`);
-                const data = await res.json();
-                dispatch({ type: "cities/loaded", payload: data });
+                if (user) {
+                    const { data, error } = await supabase
+                        .from("cities")
+                        .select("*")
+                        .eq("user_id", user?.id);
+
+                    if (error) throw error;
+
+                    dispatch({ type: "cities/loaded", payload: data });
+                }
             } catch (error) {
                 dispatch({
                     type: "rejected",
-                    payload: `There was an error loading cities...`
+                    payload: `There was an error loading cities: ${error}`
                 });
             }
         }
 
         fetchCities();
-    }, []);
+    }, [user]);
 
     async function getCity(id) {
         if (Number(id) === currentCity.id) return;
@@ -94,13 +101,20 @@ export function CitiesProvider({ children }) {
         dispatch({ type: "loading" });
 
         try {
-            const res = await fetch(`${BASE_URL}/cities/${id}`);
-            const data = await res.json();
+            const { data, error } = await supabase
+                .from("cities")
+                .select("*")
+                .eq("id", id)
+                .eq("user_id", user?.id)
+                .single();
+
+            if (error) throw error;
+
             dispatch({ type: "city/loaded", payload: data });
         } catch (error) {
             dispatch({
                 type: "rejected",
-                payload: `There was an error loading city data...`
+                payload: `There was an error loading city data: ${error}`
             });
         }
     }
@@ -113,12 +127,12 @@ export function CitiesProvider({ children }) {
                 city_name: city.cityName,
                 country: city.country,
                 emoji: city.emoji,
-                date_visited: city.date,
+                date_visited: city.date_visited,
                 notes: city.notes,
-                lat: city.position.lat,
-                lng: city.position.lng,
+                lat: city.lat,
+                lng: city.lng,
                 user_id: user.id
-            }]).select();
+            }]).select().single();
 
             if (error) throw error;
 
@@ -127,7 +141,7 @@ export function CitiesProvider({ children }) {
         } catch (error) {
             dispatch({
                 type: "rejected",
-                payload: `There was an error creating city...`
+                payload: `There was an error creating city: ${error}`
             });
         }
     }

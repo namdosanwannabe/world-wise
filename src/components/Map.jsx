@@ -47,10 +47,10 @@ const Map = () => {
                 {cities?.map((city) => (
                     <Marker
                         key={city.id}
-                        position={[city.position.lat, city.position.lng]}>
+                        position={[city.lat, city.lng]}>
                         <Popup>
                             <span>{flagemojiToPNG(city.emoji)}</span>
-                            <span>{city.cityName}</span>
+                            <span>{city.city_name}</span>
                         </Popup>
                     </Marker>
                 ))}

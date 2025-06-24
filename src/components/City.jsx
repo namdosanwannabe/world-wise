@@ -1,10 +1,9 @@
 import { useParams } from "react-router-dom";
 import styles from "./City.module.css";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useCities } from "../contexts/CitiesContext";
 import flagemojiToPNG from "../utils/emojiToPng";
 import Spinner from "./Spinner";
-import Button from "./Button";
 import BackButton from "./BackButton";
 
 const formatDate = (date) =>
@@ -18,7 +17,7 @@ const formatDate = (date) =>
 function City() {
     const { id } = useParams();
     const { getCity, currentCity, isLoading } = useCities();
-    const { cityName, emoji, date, notes } = currentCity;
+    const { city_name, emoji, date_visited, notes } = currentCity;
 
     useEffect(() => {
         getCity(id);
@@ -31,13 +30,13 @@ function City() {
             <div className={styles.row}>
                 <h6>City name</h6>
                 <h3>
-                    <span>{flagemojiToPNG(emoji)}</span> {cityName}
+                    <span>{flagemojiToPNG(emoji)}</span> {city_name}
                 </h3>
             </div>
 
             <div className={styles.row}>
-                <h6>You went to {cityName} on</h6>
-                <p>{formatDate(date || null)}</p>
+                <h6>You went to {city_name} on</h6>
+                <p>{formatDate(date_visited || null)}</p>
             </div>
 
             {notes && (
@@ -50,11 +49,11 @@ function City() {
             <div className={styles.row}>
                 <h6>Learn more</h6>
                 <a
-                    href={`https://en.wikipedia.org/wiki/${cityName}`}
+                    href={`https://en.wikipedia.org/wiki/${city_name}`}
                     target="_blank"
                     rel="noreferrer"
                 >
-                    Check out {cityName} on Wikipedia &rarr;
+                    Check out {city_name} on Wikipedia &rarr;
                 </a>
             </div>
 

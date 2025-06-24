@@ -73,9 +73,10 @@ function Form() {
             cityName,
             country,
             emoji: countryCode,
-            date,
+            date_visited: date,
             notes,
-            position: { lat, lng },
+            lat,
+            lng,
         }
 
         await createCity(newCity);
