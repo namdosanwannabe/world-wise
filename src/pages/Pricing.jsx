@@ -14,9 +14,7 @@ export default function Product() {
                         Just $9/month.
                     </h2>
                     <p>
-                        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Vitae vel
-                        labore mollitia iusto. Recusandae quos provident, laboriosam fugit
-                        voluptatem iste.
+                        Track your travels without limits. No hidden fees, no surprises—just a straightforward plan to help you stay organized and inspired.
                     </p>
                 </div>
                 <img src="img-2.jpg" alt="overview of a large city with skyscrapers" />

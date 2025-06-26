@@ -2,8 +2,6 @@ import { createContext, useContext, useEffect, useReducer, useState } from "reac
 import { supabase } from "../config/supabaseConfig";
 import { useAuth } from "./AuthContext";
 
-const BASE_URL = 'http://localhost:3000';
-
 const CitiesContext = createContext();
 
 export function useCities() {
@@ -150,14 +148,19 @@ export function CitiesProvider({ children }) {
         dispatch({ type: "loading" });
 
         try {
-            await fetch(`${BASE_URL}/cities/${id}`, {
-                method: 'DELETE',
-            });
+            const { error } = await supabase
+                .from("cities")
+                .delete()
+                .eq("id", id)
+                .eq("user_id", user?.id);
+
+            if (error) throw error;
+
             dispatch({ type: "city/deleted", payload: id });
         } catch (error) {
             dispatch({
                 type: "rejected",
-                payload: `There was an error deleting city...`
+                payload: `There was an error deleting city: ${error}`
             });
         }
     }

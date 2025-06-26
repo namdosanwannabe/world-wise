@@ -1,5 +1,6 @@
 import PageNav from "../components/PageNav";
 import styles from "./Product.module.css";
+import { Linkedin, Github, Instagram } from 'lucide-react';
 
 export default function Product() {
     return (
@@ -13,16 +14,37 @@ export default function Product() {
                 <div>
                     <h2>About WorldWide.</h2>
                     <p>
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo est
-                        dicta illum vero culpa cum quaerat architecto sapiente eius non
-                        soluta, molestiae nihil laborum, placeat debitis, laboriosam at fuga
-                        perspiciatis?
+                        WorldWise is a travel tracking app built to explore Supabase, Google OAuth, and modern React features like Context and Reducers. It uses React Router for  client-side navigation, Leaflet for interactive maps and CSS Modules for styling.
                     </p>
-                    <p>
-                        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Corporis
-                        doloribus libero sunt expedita ratione iusto, magni, id sapiente
-                        sequi officiis et.
-                    </p>
+                    <div className={styles.links}>
+                        <a
+                            href='https://www.linkedin.com/in/archiecayabyabconnects/'
+                            className={styles.link}
+                            target='_blank'
+                            rel='noreferrer'
+                        >
+                            <Linkedin size={16} />
+                            LinkedIn
+                        </a>
+                        <a
+                            href='https://github.com/namdosanwannabe'
+                            className={styles.link}
+                            target='_blank'
+                            rel='noreferrer'
+                        >
+                            <Github size={16} />
+                            GitHub
+                        </a>
+                        <a
+                            href='https://www.instagram.com/achikochi_/'
+                            className={styles.link}
+                            target='_blank'
+                            rel='noreferrer'
+                        >
+                            <Instagram size={16} />
+                            Instagram
+                        </a>
+                    </div>
                 </div>
             </section>
         </main>

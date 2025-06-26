@@ -12,7 +12,7 @@ const Map = () => {
     const { cities } = useCities();
     const [mapLat, mapLng] = useUrlPosition();
 
-    const [mapPosition, setMapPosition] = useState([40, 0]);
+    const [mapPosition, setMapPosition] = useState([14.677759365613536, 120.53993225097658]);
     const {
         isLoading: isLoadingPositon,
         position: geolocationPosition,
